@@ -12,7 +12,7 @@ void setup(){
 
 	lcd.setCursor(2, 0);
 	lcd.print("IoT Project");
-	lcd.setCursor(2, 1);
+	lcd.setCursor(0, 1);
 	lcd.print("Smart Flowerpot!");
 	delay(1000);
 }
