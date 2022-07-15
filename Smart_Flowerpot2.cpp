@@ -1,4 +1,4 @@
-#if 1
+#if 0
 
 #include <DHT.h>
 #include <Arduino.h>
@@ -47,12 +47,6 @@ void setup(){
 
 	lcd.init();
 	lcd.backlight();
-	lcd.createChar(0, temp);
-	lcd.createChar(1, C);
-	lcd.createChar(2, humi);
-	lcd.createChar(4, water);
-	lcd.createChar(5, good);
-	lcd.createChar(6, bad);
 	lcd.clear();
 
 	pinMode(DHTPIN,INPUT);
