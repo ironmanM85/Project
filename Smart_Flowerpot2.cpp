@@ -1,5 +1,6 @@
 #include <DHT.h>
 #include <Arduino.h>
+#include <Emotion_Farm.h>
 #include <LiquidCrystal_I2C.h>
 
 #define DHTPIN		A0
@@ -12,10 +13,22 @@ void setup(){
 	Serial.begin(115200);
 
 	lcd.init();
-	lcd.backlight();
+	lcd.backlight();	lcd.createChar(0, temp);
+	lcd.createChar(1, C);
+	lcd.createChar(2, humi);
+	lcd.createChar(4, water);
+	lcd.createChar(5, good);
+	lcd.createChar(6, bad);
 	lcd.clear();
 
 	pinMode(DHTPIN,INPUT);
+
+	lcd.createChar(0, temp);
+	lcd.createChar(1, C);
+	lcd.createChar(2, humi);
+	lcd.createChar(4, water);
+	lcd.createChar(5, good);
+	lcd.createChar(6, bad);
 
 	lcd.setCursor(2, 0);
 	lcd.print("IoT Project");
@@ -33,9 +46,11 @@ void loop(){
 	Serial.println(String("Humid : ") + h + String(", Temp : ") + t);
 
 	lcd.setCursor(0, 0);
+	lcd.write(2);
 	lcd.print(String("Humid : ") + h);
 
 	lcd.setCursor(0, 1);
+	lcd.write(0);
 	lcd.print(String("Temp : ") + t);
 
 
