@@ -1,10 +1,9 @@
-/*
- * Flame.cpp
- *
- *  Created on: 2022. 7. 15.
- *      Author: python
- */
+#include <Arduino.h>
 
+void setup(){
 
+}
 
+void loop(){
 
+}
