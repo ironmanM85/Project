@@ -1,8 +1,8 @@
 #if 1
 
 #include <Arduino.h>
-#include <Emotion_Farm.h>
-#include <LiquidCrystal_I2C.h>
+#include "util/Emotion_Farm.h"
+#include "util/LiquidCrystal_I2C.h"
 
 #define Soil 		A1
 
