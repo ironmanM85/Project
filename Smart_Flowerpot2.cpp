@@ -1,3 +1,5 @@
+#if 0
+
 #include <DHT.h>
 #include <Arduino.h>
 #include <Emotion_Farm.h>
@@ -57,3 +59,5 @@ void loop(){
 
 	delay(1000);
 }
+
+#endif
