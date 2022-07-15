@@ -1,3 +1,5 @@
+#if 1
+
 #include <DHT.h>
 #include <Arduino.h>
 #include <Emotion_Farm.h>
@@ -75,3 +77,5 @@ void loop(){
 	temp_humid.loop();
 
 }
+
+#endif
