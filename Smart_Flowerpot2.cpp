@@ -13,7 +13,8 @@ void setup(){
 	Serial.begin(115200);
 
 	lcd.init();
-	lcd.backlight();	lcd.createChar(0, temp);
+	lcd.backlight();
+	lcd.createChar(0, temp);
 	lcd.createChar(1, C);
 	lcd.createChar(2, humi);
 	lcd.createChar(4, water);
