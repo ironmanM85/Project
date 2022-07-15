@@ -6,10 +6,6 @@
 #include <LiquidCrystal_I2C.h>
 #include "util/SuperLoop.h"
 
-
-LiquidCrystal_I2C lcd(0x27,16,2);
-DHT dht(DHTPIN,DHTTYPE);
-
 class Temp_Humid : public SuperLoop{
 	int h;
 	int t;
