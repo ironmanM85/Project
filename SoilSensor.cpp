@@ -11,8 +11,6 @@ LiquidCrystal_I2C lcd(0x27,16,2);
 
 int LED[3] = {2,3,4};
 
-<<<<<<< HEAD
-=======
 class Moisture : public SuperLoop{
 	int value;
 public:
@@ -61,7 +59,6 @@ public:
 	}
 };
 
->>>>>>> ABH
 void setup(){
 	Serial.begin(115200);
 
@@ -69,13 +66,6 @@ void setup(){
 	lcd.backlight();
 	lcd.clear();
 
-<<<<<<< HEAD
-	pinMode(Soil,INPUT);
-	for(int i = 0; i < 3; i++)
-		pinMode(LED[i],OUTPUT);
-
-=======
->>>>>>> ABH
 	lcd.createChar(4, water);
 	lcd.createChar(5, good);
 	lcd.createChar(6, bad);
@@ -84,37 +74,7 @@ void setup(){
 Moisture moi;
 
 void loop(){
-<<<<<<< HEAD
-	int value = analogRead(Soil);
-
-	Serial.println(String("Soli = ") + value);
-
-	lcd.clear();
-	lcd.setCursor(0, 1);
-	lcd.write(4);
-	lcd.print(String(" ") + value);
-
-	lcd.setCursor(9, 1);
-	if(value > 800){
-		for(int i = 0; i < 3; i++){
-			lcd.write(6);
-			lcd.print(" ");
-			digitalWrite(LED[0],HIGH);
-			digitalWrite(LED[1],LOW);
-		}
-	} else{
-		for(int i = 0; i < 3; i++){
-			lcd.write(5);
-			lcd.print(" ");
-			digitalWrite(LED[0],LOW);
-			digitalWrite(LED[1],OUTPUT);
-		}
-	}
-
-	delay(1000);
-=======
 	moi.loop();
->>>>>>> ABH
 }
 
 #endif
