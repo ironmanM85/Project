@@ -1,4 +1,4 @@
-#if 1
+#if 0
 
 #include <Arduino.h>
 #include "util/Emotion_Farm.h"
@@ -34,21 +34,28 @@ public:
 		lcd.print(String(" ") + value + String("%"));
 		lcd.setCursor(9, 1);
 
-		if(value < 25){
-			for(int i = 0; i < 3; i++){
-				lcd.write(6);
-				lcd.print(" ");
-				digitalWrite(LED[0],HIGH);
-				digitalWrite(LED[1],LOW);
-			}
-		} else{
-			for(int i = 0; i < 3; i++){
-				lcd.write(5);
-				lcd.print(" ");
-				digitalWrite(LED[0],LOW);
-				digitalWrite(LED[1],OUTPUT);
-			}
+		if(value < 25)
+			On();
+		else
+			Off();
+	}
+
+	void On(){
+		for(int i = 0; i < 3; i++){
+			lcd.write(6);
+			lcd.print(" ");
 		}
+		digitalWrite(LED[0],HIGH);
+		digitalWrite(LED[1],LOW);
+	}
+
+	void Off(){
+		for(int i = 0; i < 3; i++){
+			lcd.write(5);
+			lcd.print(" ");
+		}
+		digitalWrite(LED[0],LOW);
+		digitalWrite(LED[1],OUTPUT);
 	}
 };
 
