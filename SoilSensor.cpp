@@ -8,6 +8,8 @@
 
 LiquidCrystal_I2C lcd(0x27,16,2);
 
+int LED[3] = {2,3,4};
+
 void setup(){
 	Serial.begin(115200);
 
@@ -16,6 +18,8 @@ void setup(){
 	lcd.clear();
 
 	pinMode(Soil,INPUT);
+	for(int i = 0; i < 3; i++)
+		pinMode(LED[i],OUTPUT);
 
 	lcd.createChar(4, water);
 	lcd.createChar(5, good);
@@ -37,11 +41,15 @@ void loop(){
 		for(int i = 0; i < 3; i++){
 			lcd.write(6);
 			lcd.print(" ");
+			digitalWrite(LED[0],HIGH);
+			digitalWrite(LED[1],LOW);
 		}
 	} else{
 		for(int i = 0; i < 3; i++){
 			lcd.write(5);
 			lcd.print(" ");
+			digitalWrite(LED[0],LOW);
+			digitalWrite(LED[1],OUTPUT);
 		}
 	}
 
