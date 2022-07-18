@@ -1,32 +1,51 @@
 #if 1
 
 #include <Arduino.h>
+#include "util/SuperLoop.h"
 
 #define Soil 		A1
 #define PumpA		9
 
-void setup(){
-	Serial.begin(115200);
+class WaterPump : public SuperLoop{
 
-	pinMode(PumpA, OUTPUT);
-	pinMode(Soil, INPUT);
-}
+public:
+	WaterPump() : SuperLoop(3000){
+		pinMode(PumpA, OUTPUT);
+	}
 
-void loop(){
-	int value = analogRead(Soil);
-	Serial.println(String("Soil value = ") + value);
+	void job() override{
+		int value = analogRead(Soil);
 
-	if(value > 800){
-//		digitalWrite(PumpA, HIGH);
+		Serial.println(String("Soil value = ") + value);
+
+		if(value > 800){
+			pumpOn();
+		}
+
+		else{
+			pumpOff();
+		}
+	}
+
+	void pumpOn(){
 		analogWrite(PumpA, 255);
 	}
 
-	else{
-//		digitalWrite(PumpA, LOW);
+	void pumpOff(){
 		analogWrite(PumpA, 0);
 	}
 
-	delay(1000);
+};
+
+void setup(){
+	Serial.begin(115200);
+
+	pinMode(Soil, INPUT);
+}
+
+WaterPump waterpump;
+void loop(){
+	waterpump.loop();
 }
 
 #endif
