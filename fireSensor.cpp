@@ -1,28 +1,30 @@
 #if 1
 
-
 #include <Arduino.h>
 #include <Firmata.h>
 
-int flame = A0;
-int Buzzer = 5;
-int	val = 0;
+#define flame	A0
+#define Buzzer	5
+#define LED		6
 
 void setup() {
-//	pinMode(flame,OUTPUT);
-	pinMode(Buzzer,OUTPUT);
 	Serial.begin(115200);
+
+	pinMode(flame,INPUT);
+	pinMode(Buzzer,OUTPUT);
+	pinMode(LED, OUTPUT);
 }
 
 void loop() {
+	int	val = 0;
 	val = analogRead(flame);
 	Serial.println(val);
 	if(val < 50) {
-		digitalWrite(5,LOW);
-		analogWrite(6, 0);
+		digitalWrite(Buzzer,LOW);
+		digitalWrite(LED, LOW);
 	}else{
-		digitalWrite(5, HIGH);
-		analogWrite(6, 255);
+		digitalWrite(Buzzer, HIGH);
+		digitalWrite(LED, HIGH);
 	}
 	delay(1000);
 }
