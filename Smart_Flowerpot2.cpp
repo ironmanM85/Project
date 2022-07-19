@@ -29,7 +29,7 @@ public:
 	}
 
 	void readDht(){
-		lcd.clear();
+		clear(0,0);
 		h = dht.readHumidity();
 		t = dht.readTemperature();
 
@@ -43,6 +43,13 @@ public:
 		lcd.setCursor(9, 0);
 		lcd.write(2);
 		lcd.print(String(" ") + h + String("%"));
+	}
+
+	void clear(int col, int row){
+		lcd.setCursor(col, row);
+		char space[16+1];
+		sprintf(space,"%16s", " ");
+		lcd.print(space);
 	}
 };
 
@@ -87,7 +94,7 @@ public:
 	}
 
 	void readSoil() {
-		lcd.clear();
+		clear(0,1);
 		value = map(analogRead(Soil), 1023, 200, 0, 100);
 		Serial.print(String("Soil value = ") + analogRead(Soil));
 		Serial.println(String(" Soil map value = ") + value);
@@ -124,6 +131,13 @@ public:
 		digitalWrite(LED[0], LOW);
 		digitalWrite(LED[1], HIGH);
 	}
+
+	void clear(int col, int row){
+		lcd.setCursor(col, row);
+		char space[16+1];
+		sprintf(space,"%16s", " ");
+		lcd.print(space);
+	}
 };
 
 void setup(){
@@ -147,8 +161,6 @@ void setup(){
 	lcd.print("IoT Project");
 	lcd.setCursor(0, 1);
 	lcd.print("Smart Flowerpot!");
-
-	lcd.clear();
 }
 
 Temp_Humid temp_humid;
