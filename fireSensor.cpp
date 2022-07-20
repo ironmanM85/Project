@@ -19,7 +19,7 @@ void loop() {
 	int	val = 0;
 	val = analogRead(flame);
 	Serial.println(val);
-	if(val < 50) {
+	if(val < 20) {
 		digitalWrite(Buzzer,LOW);
 		digitalWrite(LED, LOW);
 	}else{
