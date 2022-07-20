@@ -7,8 +7,10 @@
 #include "util/SuperLoop.h"
 
 #define DHTPIN		A0
-#define Soil 		A1
-#define PumpA		9
+#define SOIL 		A1
+#define FLAME	 	A2
+#define BUZZER		5
+#define PUMPA		9
 #define DHTTYPE		DHT11
 
 LiquidCrystal_I2C lcd(0x27,16,2);
@@ -17,8 +19,8 @@ DHT dht(DHTPIN,DHTTYPE);
 int LED[3] = { 2, 3, 4 };
 
 class Temp_Humid : public SuperLoop{
-	int h;
-	int t;
+	int h = 0;
+	int t = 0;
 public:
 	Temp_Humid() : SuperLoop(6000){
 		pinMode(DHTPIN,INPUT);
@@ -59,7 +61,7 @@ public:
 	int state = 0;
 
 	WaterPump() : SuperLoop(3000) {
-		pinMode(PumpA, OUTPUT);
+		pinMode(PUMPA, OUTPUT);
 	}
 
 	void job() override {
@@ -72,11 +74,11 @@ public:
 	}
 
 	void pumpOn() {
-		analogWrite(PumpA, 255);
+		analogWrite(PUMPA, 255);
 	}
 
 	void pumpOff() {
-		analogWrite(PumpA, 0);
+		analogWrite(PUMPA, 0);
 	}
 };
 
@@ -86,7 +88,7 @@ class Moisture: public SuperLoop {
 	int value = 0;
 public:
 	Moisture() : SuperLoop(6000) {
-		pinMode(Soil, INPUT);
+		pinMode(SOIL, INPUT);
 	}
 
 	void job() override {
@@ -95,8 +97,8 @@ public:
 
 	void readSoil() {
 		clear(0,1);
-		value = map(analogRead(Soil), 1023, 200, 0, 100);
-		Serial.print(String("Soil value = ") + analogRead(Soil));
+		value = map(analogRead(SOIL), 1023, 200, 0, 100);
+		Serial.print(String("Soil value = ") + analogRead(SOIL));
 		Serial.println(String(" Soil map value = ") + value);
 		lcd.setCursor(1, 1);
 
@@ -145,6 +147,7 @@ void setup(){
 
 	for (int i = 0; i < 3; i++)
 			pinMode(LED[i], OUTPUT);
+	pinMode(BUZZER,OUTPUT);
 
 	lcd.init();
 	lcd.backlight();
@@ -170,6 +173,16 @@ void loop(){
 	temp_humid.loop();
 	moi.loop();
 	waterpump.loop();
+
+	int val = analogRead(FLAME);
+	Serial.println(val);
+	if(val < 20) {
+		digitalWrite(BUZZER,LOW);
+		digitalWrite(LED[2], LOW);
+	}else{
+		digitalWrite(BUZZER, HIGH);
+		digitalWrite(LED[2], HIGH);
+	}
 }
 
 #endif
