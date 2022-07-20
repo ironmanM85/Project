@@ -9,7 +9,7 @@
 #define DHTPIN		A0
 #define SOIL 		A1
 #define FLAME	 	A2
-#define BUZZER		5
+#define BUZZER		7
 #define PUMPA		9
 #define DHTTYPE		DHT11
 
@@ -17,6 +17,33 @@ LiquidCrystal_I2C lcd(0x27,16,2);
 DHT dht(DHTPIN,DHTTYPE);
 
 int LED[3] = { 2, 3, 4 };
+
+class Fire : public SuperLoop{
+public:
+	int state = 1;
+
+	Fire() : SuperLoop(10){
+		pinMode(BUZZER,OUTPUT);
+	}
+
+	void job() override{
+		Check_Fire();
+	}
+
+	void Check_Fire(){
+		int fireV = analogRead(FLAME);
+		Serial.println(fireV);
+		if(fireV < 20) {
+			digitalWrite(BUZZER,LOW);
+			digitalWrite(LED[2], LOW);
+			state = 1;
+		}else{
+			digitalWrite(BUZZER, HIGH);
+			digitalWrite(LED[2], HIGH);
+			state = 0;
+		}
+	}
+};
 
 class Temp_Humid : public SuperLoop{
 	int h = 0;
@@ -147,7 +174,6 @@ void setup(){
 
 	for (int i = 0; i < 3; i++)
 			pinMode(LED[i], OUTPUT);
-	pinMode(BUZZER,OUTPUT);
 
 	lcd.init();
 	lcd.backlight();
@@ -168,21 +194,17 @@ void setup(){
 
 Temp_Humid temp_humid;
 Moisture moi;
+Fire fire;
 
 void loop(){
-	temp_humid.loop();
-	moi.loop();
-	waterpump.loop();
+	fire.loop();
 
-	int val = analogRead(FLAME);
-	Serial.println(val);
-	if(val < 20) {
-		digitalWrite(BUZZER,LOW);
-		digitalWrite(LED[2], LOW);
-	}else{
-		digitalWrite(BUZZER, HIGH);
-		digitalWrite(LED[2], HIGH);
+	if(fire.state){
+		temp_humid.loop();
+		moi.loop();
+		waterpump.loop();
 	}
+
 }
 
 #endif
