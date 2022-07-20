@@ -22,7 +22,7 @@ class Fire : public SuperLoop{
 public:
 	int state = 1;
 
-	Fire() : SuperLoop(10){
+	Fire() : SuperLoop(300){
 		pinMode(BUZZER,OUTPUT);
 	}
 
@@ -40,6 +40,8 @@ public:
 		}else{
 			digitalWrite(BUZZER, HIGH);
 			digitalWrite(LED[2], HIGH);
+			lcd.clear();
+			lcd.print("Fire!!!!");
 			state = 0;
 		}
 	}
@@ -203,6 +205,10 @@ void loop(){
 		temp_humid.loop();
 		moi.loop();
 		waterpump.loop();
+	}
+
+	else{
+		waterpump.pumpOff();
 	}
 
 }
