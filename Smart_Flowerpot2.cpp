@@ -23,7 +23,7 @@ DHT dht(DHTPIN,DHTTYPE);
 
 int LED[3] = { 2, 3, 4 };
 
-class AnalogReport : public SuperLoop{
+/*class AnalogReport : public SuperLoop{
 public:
 	byte analogIsEnable[4];
 	int preAnalogValue[4];
@@ -67,9 +67,24 @@ void sysExCallback(uint8_t command, uint8_t argc, uint8_t *argv){
 				int value = firstByte << 8 | secondByte;
 			}
 			break;
-
+		case COMMAND_WATER:
+			if(argc == 4){
+				byte firstByte = argv[0] | argv[1] << 7;
+				byte secondByte = argv[2] | argv[3] << 7;
+				int value = firstByte << 8 | secondByte;
+			}
+			break;
+		case COMMAND_FIRE:
+			if(argc == 4){
+				byte firstByte = argv[0] | argv[1] << 7;
+				byte secondByte = argv[2] | argv[3] << 7;
+				int value = firstByte << 8 | secondByte;
+			}
+			break;
+		default:
+			break;
 	}
-}
+}*/
 
 class Fire : public SuperLoop{
 public:
@@ -228,9 +243,9 @@ void setup(){
 	Serial.begin(115200);
 	Firmata.begin(115200);
 
-	Firmata.attach(SET_PIN_MODE, setPinModeCallback);
-	Firmata.attach(REPORT_ANALOG, reportAnalogCallback);
-	Firmata.attach(SET_PIN_MODE, sysExCallback);
+//	Firmata.attach(SET_PIN_MODE, setPinModeCallback);
+//	Firmata.attach(REPORT_ANALOG, reportAnalogCallback);
+//	Firmata.attach(SET_PIN_MODE, sysExCallback);
 
 	for (int i = 0; i < 3; i++)
 			pinMode(LED[i], OUTPUT);
