@@ -1,4 +1,4 @@
-#if 0
+#if 1
 
 #include <Arduino.h>
 #include "util/DHT.h"
@@ -190,7 +190,7 @@ void setup(){
 	lcd.createChar(6, bad);
 
 	lcd.setCursor(2, 0);
-	lcd.print("IoT Project");
+	lcd.print("IoT Project!!");
 	lcd.setCursor(0, 1);
 	lcd.print("Smart Flowerpot!");
 }
