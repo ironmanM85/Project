@@ -14,77 +14,10 @@
 #define PUMPA		9
 #define DHTTYPE		DHT11
 
-#define COMMAND_HUMID	0
-#define COMMAND_WATER	1
-#define COMMAND_FIRE	2
-
 LiquidCrystal_I2C lcd(0x27,16,2);
 DHT dht(DHTPIN,DHTTYPE);
 
 int LED[3] = { 2, 3, 4 };
-
-/*class AnalogReport : public SuperLoop{
-public:
-	byte analogIsEnable[4];
-	int preAnalogValue[4];
-	AnalogReport() : SuperLoop(6000){
-		memset(preAnalogValue, 0, sizeof(preAnalogValue));
-	}
-
-	void job() override{
-		for(int i = 0; i < 4; i++){
-			if(analogIsEnable[i]){
-				int value = analogRead(i);
-				if(preAnalogValue[i] != value){
-					preAnalogValue[i] = value;
-					Firmata.sendAnalog(i, value);
-				}
-			}
-		}
-	}
-};
-
-AnalogReport analogReport;
-
-void setPinModeCallback(uint8_t pin, int mode){
-	if(mode == PIN_MODE_PULLUP)
-		pinMode(pin, INPUT_PULLUP);
-	else
-		pinMode(pin,mode);
-}
-
-void reportAnalogCallback(uint8_t pin, int enable){
-	if(pin < 4)
-		analogReport.analogIsEnable[pin] = enable;
-}
-
-void sysExCallback(uint8_t command, uint8_t argc, uint8_t *argv){
-	switch(command){
-		case COMMAND_HUMID:
-			if(argc == 4){
-				byte firstByte = argv[0] | argv[1] << 7;
-				byte secondByte = argv[2] | argv[3] << 7;
-				int value = firstByte << 8 | secondByte;
-			}
-			break;
-		case COMMAND_WATER:
-			if(argc == 4){
-				byte firstByte = argv[0] | argv[1] << 7;
-				byte secondByte = argv[2] | argv[3] << 7;
-				int value = firstByte << 8 | secondByte;
-			}
-			break;
-		case COMMAND_FIRE:
-			if(argc == 4){
-				byte firstByte = argv[0] | argv[1] << 7;
-				byte secondByte = argv[2] | argv[3] << 7;
-				int value = firstByte << 8 | secondByte;
-			}
-			break;
-		default:
-			break;
-	}
-}*/
 
 class Fire : public SuperLoop{
 public:
@@ -241,11 +174,6 @@ public:
 
 void setup(){
 	Serial.begin(115200);
-	Firmata.begin(115200);
-
-//	Firmata.attach(SET_PIN_MODE, setPinModeCallback);
-//	Firmata.attach(REPORT_ANALOG, reportAnalogCallback);
-//	Firmata.attach(SET_PIN_MODE, sysExCallback);
 
 	for (int i = 0; i < 3; i++)
 			pinMode(LED[i], OUTPUT);
@@ -273,9 +201,6 @@ Fire fire;
 
 void loop(){
 	fire.loop();
-
-	if(Firmata.available())
-		Firmata.processInput();
 
 	if(fire.state){
 		temp_humid.loop();
