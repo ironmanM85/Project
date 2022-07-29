@@ -1,4 +1,4 @@
-#if 0
+#if 1
 
 #include <Arduino.h>
 #include "util/DHT.h"
@@ -34,7 +34,7 @@ public:
 	void Check_Fire(){
 		int fireV = analogRead(FLAME);
 		Serial.println(fireV);
-		if(fireV < 20) {
+		if(fireV < 10) {
 			digitalWrite(BUZZER,LOW);
 			digitalWrite(LED[2], LOW);
 			state = 1;
