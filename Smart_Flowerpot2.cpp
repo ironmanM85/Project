@@ -8,18 +8,19 @@
 #include "util/SuperLoop.h"
 
 #define DHTPIN		A0
-#define SOIL 		A1
+#define SOIL		A1
 #define FLAME	 	A2
 #define BUZZER		5
 #define PUMPA		9
 #define DHTTYPE		DHT11
+#define COMMAND_SOILD	0x01
 
 LiquidCrystal_I2C lcd(0x27,16,2);
 DHT dht(DHTPIN,DHTTYPE);
 
 int LED[3] = { 2, 3, 4 };
 
-class Fire : public SuperLoop{
+/*class Fire : public SuperLoop{
 public:
 	int state = 1;
 
@@ -46,7 +47,7 @@ public:
 			state = 0;
 		}
 	}
-};
+};*/
 
 class Temp_Humid : public SuperLoop{
 	int h = 0;
@@ -114,6 +115,77 @@ public:
 
 WaterPump waterpump;
 
+class AnalogReport : public SuperLoop {
+public:
+	byte analogIsEnable[4];
+	int preAnalogValue[4];
+	AnalogReport() : SuperLoop(6000) {
+		memset(preAnalogValue, 0, sizeof(preAnalogValue));
+	}
+	void job() override {
+		for (int i=0; i<4; i++) {
+			if (analogIsEnable[i]) {
+				int value = analogRead(i);
+				preAnalogValue[i] = value;
+				Firmata.sendAnalog(i, value);
+			}
+		}
+	}
+};
+
+AnalogReport analogReport;
+
+void setPinModeCallback(uint8_t pin, int mode) {
+	if (mode == PIN_MODE_PULLUP)
+		pinMode(pin, INPUT_PULLUP);
+	else
+		pinMode(pin, mode);
+
+}
+
+void reportAnalogCallback(uint8_t pin, int enable) {
+	if (pin < 4)
+		analogReport.analogIsEnable[pin] = enable;
+}
+
+void sysExCallback(uint8_t command, uint8_t argc, uint8_t *argv) {
+	switch (command) {
+		case COMMAND_SOILD:
+			if (argc == 4) {
+				byte firstByte = argv[0] | argv[1] << 7;
+				byte secondByte = argv[2] | argv[3] << 7;
+				int value = firstByte << 8 | secondByte;
+				lcd.setCursor(1, 1);
+				lcd.write(4);
+				lcd.print(String(" ") + value + String("%"));
+				lcd.setCursor(9, 1);
+				if(value < 25){
+					waterpump.state = 1;
+
+					for (int i = 0; i < 3; i++) {
+						lcd.write(6);
+						lcd.print(" ");
+					}
+					digitalWrite(LED[0], HIGH);
+					digitalWrite(LED[1], LOW);
+				}
+				else{
+					waterpump.state = 0;
+
+					for (int i = 0; i < 3; i++) {
+						lcd.write(5);
+						lcd.print(" ");
+					}
+					digitalWrite(LED[0], LOW);
+					digitalWrite(LED[1], HIGH);
+				}
+			}
+			break;
+		default:
+			break;
+	}
+}
+
 class Moisture: public SuperLoop {
 	int value = 0;
 public:
@@ -175,6 +247,11 @@ public:
 void setup(){
 	Serial.begin(115200);
 
+	Firmata.begin(115200);
+	Firmata.attach(SET_PIN_MODE, setPinModeCallback);
+	Firmata.attach(REPORT_ANALOG, reportAnalogCallback);
+	Firmata.attach(START_SYSEX, sysExCallback);
+
 	for (int i = 0; i < 3; i++)
 			pinMode(LED[i], OUTPUT);
 
@@ -189,28 +266,44 @@ void setup(){
 	lcd.createChar(5, good);
 	lcd.createChar(6, bad);
 
-	lcd.setCursor(2, 0);
+	/*lcd.setCursor(2, 0);
 	lcd.print("IoT Project!!");
 	lcd.setCursor(0, 1);
-	lcd.print("Smart Flowerpot!");
+	lcd.print("Smart Flowerpot!");*/
 }
 
 Temp_Humid temp_humid;
 Moisture moi;
-Fire fire;
+//Fire fire;
+
 
 void loop(){
-	fire.loop();
+	if (Firmata.available())
+		Firmata.processInput();
 
-	if(fire.state){
-		temp_humid.loop();
-		moi.loop();
-		waterpump.loop();
-	}
+	analogReport.loop();
+	waterpump.loop();
 
-	else{
-		waterpump.pumpOff();
-	}
 }
+
+//	else{
+//		moi.loop();
+//		waterpump.loop();
+//	}
+
+	/*else{
+
+	}*/
+//	fire.loop();
+//
+//	if(fire.state){
+//
+////		moi.loop();
+//		waterpump.loop();
+//	}
+//
+//	else{
+//		waterpump.pumpOff();
+//	}
 
 #endif
