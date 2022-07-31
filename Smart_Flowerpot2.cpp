@@ -34,7 +34,7 @@ public:
 	void Check_Fire(){
 		int fireV = analogRead(FLAME);
 		Serial.println(fireV);
-		if(fireV < 10) {
+		if(fireV < 15) {
 			digitalWrite(BUZZER,LOW);
 			digitalWrite(LED[2], LOW);
 			state = 1;
