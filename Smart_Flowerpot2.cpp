@@ -10,7 +10,7 @@
 #define DHTPIN		A0
 #define SOIL 		A1
 #define FLAME	 	A2
-#define BUZZER		7
+#define BUZZER		5
 #define PUMPA		9
 #define DHTTYPE		DHT11
 
