@@ -20,72 +20,6 @@ DHT dht(DHTPIN,DHTTYPE);
 
 int LED[3] = { 2, 3, 4 };
 
-/*class Fire : public SuperLoop{
-public:
-	int state = 1;
-
-	Fire() : SuperLoop(300){
-		pinMode(BUZZER,OUTPUT);
-	}
-
-	void job() override{
-		Check_Fire();
-	}
-
-	void Check_Fire(){
-		int fireV = analogRead(FLAME);
-		Serial.println(fireV);
-		if(fireV < 15) {
-			digitalWrite(BUZZER,LOW);
-			digitalWrite(LED[2], LOW);
-			state = 1;
-		}else{
-			digitalWrite(BUZZER, HIGH);
-			digitalWrite(LED[2], HIGH);
-			lcd.clear();
-			lcd.print("Fire!!!!");
-			state = 0;
-		}
-	}
-};*/
-
-class Temp_Humid : public SuperLoop{
-	int h = 0;
-	int t = 0;
-public:
-	Temp_Humid() : SuperLoop(6000){
-		pinMode(DHTPIN,INPUT);
-	}
-
-	void job() override{
-		readDht();
-	}
-
-	void readDht(){
-		clear(0,0);
-		h = dht.readHumidity();
-		t = dht.readTemperature();
-
-		Serial.println(String("Humid : ") + h + String(" Temp : ") + t);
-
-		lcd.setCursor(1, 0);
-		lcd.write(0);
-		lcd.print(String(" ") + t);
-		lcd.write(1);
-
-		lcd.setCursor(9, 0);
-		lcd.write(2);
-		lcd.print(String(" ") + h + String("%"));
-	}
-
-	void clear(int col, int row){
-		lcd.setCursor(col, row);
-		char space[16+1];
-		sprintf(space,"%16s", " ");
-		lcd.print(space);
-	}
-};
-
 class WaterPump: public SuperLoop {
 	int prestate = 1;
 public:
@@ -115,15 +49,77 @@ public:
 
 WaterPump waterpump;
 
+class Fire : public SuperLoop{
+public:
+	Fire() : SuperLoop(300){
+		pinMode(BUZZER,OUTPUT);
+	}
+
+	void job() override{
+		Check_Fire();
+	}
+
+	void Check_Fire(){
+		int fireV = analogRead(FLAME);
+		if(fireV < 15) {
+			digitalWrite(BUZZER,LOW);
+			digitalWrite(LED[2], LOW);
+		}else{
+			digitalWrite(BUZZER, HIGH);
+			digitalWrite(LED[2], HIGH);
+			waterpump.pumpOff();
+			lcd.clear();
+			lcd.print("Fire!!!!");
+		}
+	}
+};
+
+class Temp_Humid : public SuperLoop{
+	int h = 0;
+	int t = 0;
+public:
+	Temp_Humid() : SuperLoop(6000){
+		pinMode(DHTPIN,INPUT);
+	}
+
+	void job() override{
+		readDht();
+	}
+
+	void readDht(){
+		clear(0,0);
+		h = dht.readHumidity();
+		t = dht.readTemperature();
+
+//		Serial.println(String("Humid : ") + h + String(" Temp : ") + t);
+
+		lcd.setCursor(1, 0);
+		lcd.write(0);
+		lcd.print(String(" ") + t);
+		lcd.write(1);
+
+		lcd.setCursor(9, 0);
+		lcd.write(2);
+		lcd.print(String(" ") + h + String("%"));
+	}
+
+	void clear(int col, int row){
+		lcd.setCursor(col, row);
+		char space[16+1];
+		sprintf(space,"%16s", " ");
+		lcd.print(space);
+	}
+};
+
 class AnalogReport : public SuperLoop {
 public:
-	byte analogIsEnable[4];
-	int preAnalogValue[4];
+	byte analogIsEnable[2];
+	int preAnalogValue[2];
 	AnalogReport() : SuperLoop(6000) {
 		memset(preAnalogValue, 0, sizeof(preAnalogValue));
 	}
 	void job() override {
-		for (int i=0; i<4; i++) {
+		for (int i=0; i<2; i++) {
 			if (analogIsEnable[i]) {
 				int value = analogRead(i);
 				preAnalogValue[i] = value;
@@ -266,44 +262,28 @@ void setup(){
 	lcd.createChar(5, good);
 	lcd.createChar(6, bad);
 
-	/*lcd.setCursor(2, 0);
+	lcd.setCursor(2, 0);
 	lcd.print("IoT Project!!");
 	lcd.setCursor(0, 1);
-	lcd.print("Smart Flowerpot!");*/
+	lcd.print("Smart Flowerpot!");
+
+	delay(2000);
+	lcd.clear();
 }
 
 Temp_Humid temp_humid;
 Moisture moi;
-//Fire fire;
+Fire fire;
 
 
 void loop(){
 	if (Firmata.available())
-		Firmata.processInput();
+				Firmata.processInput();
 
+	fire.loop();
 	analogReport.loop();
 	waterpump.loop();
-
+	temp_humid.loop();
 }
-
-//	else{
-//		moi.loop();
-//		waterpump.loop();
-//	}
-
-	/*else{
-
-	}*/
-//	fire.loop();
-//
-//	if(fire.state){
-//
-////		moi.loop();
-//		waterpump.loop();
-//	}
-//
-//	else{
-//		waterpump.pumpOff();
-//	}
 
 #endif
