@@ -69,7 +69,11 @@ public:
 			digitalWrite(LED[2], HIGH);
 			waterpump.pumpOff();
 			lcd.clear();
+			lcd.setCursor(4,0);
 			lcd.print("Fire!!!!");
+			lcd.setCursor(4,1);
+			for(int i = 0; i < 8; i++)
+				lcd.write(3);
 		}
 	}
 };
@@ -258,6 +262,7 @@ void setup(){
 	lcd.createChar(0, temp);
 	lcd.createChar(1, C);
 	lcd.createChar(2, humi);
+	lcd.createChar(3, fireE);
 	lcd.createChar(4, water);
 	lcd.createChar(5, good);
 	lcd.createChar(6, bad);
