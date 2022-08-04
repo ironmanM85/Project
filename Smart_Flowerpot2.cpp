@@ -39,7 +39,7 @@ public:
 	}
 
 	void pumpOn() {
-		analogWrite(PUMPA, 255);
+		analogWrite(PUMPA, 125);
 	}
 
 	void pumpOff() {
@@ -61,7 +61,8 @@ public:
 
 	void Check_Fire(){
 		int fireV = analogRead(FLAME);
-		if(fireV < 15) {
+//		Serial.println(fireV);
+		if(fireV < 30) {
 			digitalWrite(BUZZER,LOW);
 			digitalWrite(LED[2], LOW);
 		}else{
@@ -288,6 +289,7 @@ void loop(){
 				Firmata.processInput();
 
 	fire.loop();
+//	moi.loop();
 	analogReport.loop();
 	waterpump.loop();
 	temp_humid.loop();
