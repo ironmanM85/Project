@@ -155,29 +155,31 @@ void sysExCallback(uint8_t command, uint8_t argc, uint8_t *argv) {
 				byte firstByte = argv[0] | argv[1] << 7;
 				byte secondByte = argv[2] | argv[3] << 7;
 				int value = firstByte << 8 | secondByte;
+				lcd.setCursor(0, 1);
+				char space[16+1];
+				sprintf(space,"%16s", " ");
+				lcd.print(space);
 				lcd.setCursor(1, 1);
 				lcd.write(4);
 				lcd.print(String(" ") + value + String("%"));
 				lcd.setCursor(9, 1);
 				if(value < 25){
 					waterpump.state = 1;
-
+					digitalWrite(LED[0], HIGH);
+					digitalWrite(LED[1], LOW);
 					for (int i = 0; i < 3; i++) {
 						lcd.write(6);
 						lcd.print(" ");
 					}
-					digitalWrite(LED[0], HIGH);
-					digitalWrite(LED[1], LOW);
 				}
 				else{
 					waterpump.state = 0;
-
+					digitalWrite(LED[0], LOW);
+					digitalWrite(LED[1], HIGH);
 					for (int i = 0; i < 3; i++) {
 						lcd.write(5);
 						lcd.print(" ");
 					}
-					digitalWrite(LED[0], LOW);
-					digitalWrite(LED[1], HIGH);
 				}
 			}
 			break;
