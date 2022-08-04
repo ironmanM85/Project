@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ui.m02_soil.SoilFragment" >
+
+    <TextView
+        android:id="@+id/txtAuthor"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:gravity="center"
+        android:singleLine="false"
+        android:text="IoT Project\n\nSoil Sensor"
+        android:textColor="#FFFFFF"
+        android:textSize="34sp" />
+
+    <Button
+        android:id="@+id/btn_bluetooth"
+        android:layout_width="187dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="30dp"
+        android:text="connect" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="20dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/txtSoil"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:gravity="center|left"
+            android:text="Soil Moisture(Analog) = "
+            android:textColor="#FFFFFF" />
+
+        <TextView
+            android:id="@+id/txtSoiltrans"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:gravity="center|left"
+            android:text="Soil Moisture(%) ="
+            android:textColor="#FFFFFF" />
+
+        <ImageView
+            android:id="@+id/imgWater"
+            android:layout_width="match_parent"
+            android:layout_height="258dp"
+            android:layout_marginTop="40dp"
+            android:layout_weight="1"
+            android:src="@drawable/ic_water_enough" />
+    </LinearLayout>
+</LinearLayout>

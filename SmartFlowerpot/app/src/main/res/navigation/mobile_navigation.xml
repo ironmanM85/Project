@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/nav_home">
+
+    <fragment
+        android:id="@+id/nav_home"
+        android:name="com.example.smartflowerpot.ui.m01_home.HomeFragment"
+        android:label="@string/menu_home"
+        tools:layout="@layout/fragment_home" />
+
+    <fragment
+        android:id="@+id/nav_soil"
+        android:name="com.example.smartflowerpot.ui.m02_soil.SoilFragment"
+        android:label="@string/menu_soil"
+        tools:layout="@layout/fragment_soil" />
+
+    <fragment
+        android:id="@+id/nav_temp_humid"
+        android:name="com.example.smartflowerpot.ui.m03_temp_humid.Temp_Humid_Fragment"
+        android:label="@string/menu_temp_humid"
+        tools:layout="@layout/fragment_temp_humid" />
+</navigation>
